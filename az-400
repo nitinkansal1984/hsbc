@@ -1,0 +1,101 @@
+Ganesh - 12+Exp Windows, HSBC, Azure Associate 104 certified
+Goraksh - 15+ unix, HSBC, AZ900, preparing for 104, AZ-400  
+Nirmal - AT&T DevOps Engineer, Expertise in Terraform, IAC, AKS Experience
+Jaswant - DNV, DevOps Engineer, 13+ Years unix, 3-4 Leadership, Beginner
+Sachin - 15+ Unix, HSBC, Basic Knowledge on Azure
+
+X option 1
+Monday - Thursday
+9:15AM - 11:00AM
+
+option 2
+Tuesday - Friday
+9:15AM - 11:00AM
+
+
+
+What is devops?
+
+developers + operations
+
+SDLC:
+
+Application Development and Deployment:
+
+1. Requirement: 15 to 20 days 
+2. Analysis: 10 days
+3. Design: 15-20 days
+4. Development: 30 days+
+5. Testing: 10days
+6. Deployment: PAAS, IAAS
+
+DevOps and Agile:
+
+1. Faster time to production
+2. Regular feature changes
+3. Keep up with market trends
+4. Faster integration cylcles
+5. Faster deployment cycles
+
+DevOps: CICD -- contineous integration, contineous delivery/deployment
+
+Continuous delivery is a software engineering practice where the code changes are prepared to be released. 
+Continuous deployment goes one step further than continuous delivery. Without manual invervention.
+
+
+
+Agile: Iterative process. Break entire process in to chunks. With the help of agile process, we achive constant collboaration of teams and customers. More dynamic and flexible in nature as compare to traditional SDLC process.
+
+SCRUM process:--
+
+1. Product Owner:- Gether the requirement from the cusomter and responsble for managing the product backlog. Handed over to scrum master. 
+2. Development Team:- a cross functional team that organizes and manages their own work.
+3. Scrum Master:- Promotes and support the scrum team. Monitoring the progress being done by the team and support/encourage them to close the pending items.
+
+https://www.crystalloids.com/about-us/how-we-work
+
+The Scrum events--
+
+Sprint - is a period of two weeks during which a given goal gets accomplished. 
+Sprint Planning - What can be delivered within a sprint and what work will we need to deliver it?
+Daily Scrum - is a daily meeting that the Development Team uses to review progress toward the Sprint Goal 
+Sprint Review - is held at the end of each Sprint to review the achievements within that Sprint and adapt product backlog if needed.
+Sprint Retrospective - during the retrospective, the Scrum Team inspects itself and creates a plan for improvements
+
+
+Implementing DevOps:
+Changes which needs to be adopted:
+
+1. Culture Changes:
+
+a. Reduce time taken for devleopment and deployment
+b. Reduce too many approval
+c. Revisit the processes
+d. Don't compromise on quality
+e. All team members needs to be accountable.
+
+2. Choose the right set of toolset:
+
+a. Jira and Trello for planning, sprint, tasks, problem management, change management
+b. GitHub/Azure Repo where you can do source code management - SCM
+c. Jenkins or Azure DevOps for CICD
+d. IAC tools ansible and terraform, crossplane, Cloud native tool (ARM Template, CFT)
+e. Testing tool like SELENIUM
+f. Monitoring Tool like promethous, Grafana, DataDog
+g. Cloud - AWS, Azure, Google
+
+Azure DevOps Portal:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
