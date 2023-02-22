@@ -120,6 +120,12 @@ https://learn.microsoft.com/en-us/azure/devops/boards/queries/import-work-items-
 
 Creating Teams, Groups, Users, Permissions.
 
+Access Levels:
+1. Basic-> provides most of the features within azure devops which excludes azure test plans
+2. Basic + Test Plan => this gives access to the basic plan + Test Plan
+3. Stakeholders -> Is free access but has limitations. Limited access to azure boards, pipelines, no Access to code repository
+4. Visual Studio - get access on azure devops set of tools based on visual studio subscription assigned to the user
+
 org setting -> group > users 
 
 
