@@ -114,8 +114,11 @@ Integration of azure board with slack channels/MS team channel.
 5. Enable notifications
 6. Test by creating work items.
 
+How to import list of work items from CSV:
 
+https://learn.microsoft.com/en-us/azure/devops/boards/queries/import-work-items-from-csv?view=azure-devops
 
+Creating Teams, Groups, Users, Permissions.
 
 
 
