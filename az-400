@@ -85,6 +85,37 @@ f. Monitoring Tool like promethous, Grafana, DataDog
 g. Cloud - AWS, Azure, Google
 
 Azure DevOps Portal:
+devops process:
+
+https://learn.microsoft.com/en-us/azure/devops/boards/work-items/guidance/choose-process?view=azure-devops&tabs=agile-process
+
+
+Devops Pricing:
+https://azure.microsoft.com/en-us/pricing/details/devops/azure-devops-services/
+
+IQOQ- 
+
+Organization -> project --> Boards, Repos, Pipelines, Test Plan and Artifact on azure devops
+
+Create a new project with agile process. You can always change the process even after creating a project.
+
+Create stories, work items and epic, bugs.
+Click on boards - see a different view from there. You can move stories from one stage to other.
+Sprints- You can execute story as part of sprint and define the timelines per sprint using set date option there.
+
+WorkItem Queries: You can create and save queries to filter it. Like the work items in opened state/closed state which are assigned to you can be viewed by queries.
+
+Integration of azure board with slack channels/MS team channel.
+1. Create slack channel
+2. Manage application and add board apps
+3. Run commands
+/azboards <projectURL>
+4. Subscribe to events
+5. Enable notifications
+6. Test by creating work items.
+
+
+
 
 
 
