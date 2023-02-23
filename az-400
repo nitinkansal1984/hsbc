@@ -128,6 +128,28 @@ Access Levels:
 
 org setting -> group > users 
 
+1. BurnDown chart: Focus on the remaining work items within specific period of time.
+2. BurnUP Chart: Focus on completed work.
+3. Chart for work items: All the work items available
+4. Cycle Time: Time taken for the team to complete work items once they start working on it activily
+5. Velocity: how your team is delivering as compare to the plan
+6. Lead Time: Displays the time taken from the creation of the work items to completion
+
+
+https://learn.microsoft.com/en-us/azure/devops/report/dashboards/overview?view=azure-devops
+
+
+--------------------------------------------------------------------------------GitHub and Azure Repos----------------------------------------------------------------------------
+
+What is Git: VCS version control system. Decentralized/Distributed system. Local repo. Edit it, commit it, push it back to github. Collaborate between team members.
+TFS: Centralized System. Fetch the file and do the changes and then push it back to TFS server.
+
+
+
+
+
+
+
 
 
 
