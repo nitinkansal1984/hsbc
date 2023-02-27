@@ -145,6 +145,43 @@ What is Git: VCS version control system. Decentralized/Distributed system. Local
 TFS: Centralized System. Fetch the file and do the changes and then push it back to TFS server.
 
 
+3 step process:
+
+1. Add files to staging area
+2. Commit the changes with message
+3. Push the changes to repo
+
+1. Fast Foward merge
+2. 3-way Merge
+3. Squash merge
+
+Example of 3-way merge:-
+
+$ git init
+$ echo one>1.txt
+$ git add .
+$ git commit -m 'c1'
+$ echo two>2.txt
+$ git add .
+$ git commit -m 'c2'
+$ echo three>3.txt
+$ git add .
+$ git commit -m 'C3'
+$ git branch feature
+$ git switch feature
+$ echo four>4.txt
+$ git add .
+$ git commit -m 'c4'
+$ echo five>5.txt
+$ git add .
+$ git commit -m 'c5'
+$ git switch master
+$echo six>6.txt
+$ git add .
+$ git commit -m 'c6'
+$ git merge feature
+$ git log --oneline --all --graph
+
 
 
 
