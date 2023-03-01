@@ -183,6 +183,41 @@ $ git merge feature
 $ git log --oneline --all --graph
 
 
+Cherry Pick: 
+1. Bring in the changes from specific commit. 
+2. Choose one or multiple commits
+
+command we will use:
+$ git cherry-pick <commitID> 
+you can include multiple commits separated by spaces.
+$ git cherry-pick <commitID> <commitID>
+
+Without commit:
+$ git cherry-pick <commitID> -n
+$ git commit -m "message"
+
+Rebase and Merge: 
+When it comes to rebasing and merging, most people hesitate to use git rebase as compared to git merge.
+The basic purpose of git rebase and git merge is the same, i.e. they help us to bring changes from one branch into another. The difference is that git rebase re-writes the commit history:
+
+Git Rebase Rewrites Commit History
+So, if someone else checks out your branch before we rebase ours then it would be really hard to figure out what the history of each branch is.
+
+Put my changes aside in main branch and put feature branches changes and create linear commits. The commit ID changes. Rewrites history by creating new commits. Keeps history clean.
+You can undo rebase with git reflog
+
+Always remember:
+
+git rebase, on the other hand, re-writes the changes of one branch onto another branch without the creation of a merge commit:
+
+$ git rebase --onto main <feature1> <feature2> 
+
+
+Understanding of Docker. 
+Install Docker on VM:
+
+https://docs.docker.com/engine/install/ubuntu/
+
 
 
 
