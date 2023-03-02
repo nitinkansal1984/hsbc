@@ -219,7 +219,96 @@ Install Docker on VM:
 https://docs.docker.com/engine/install/ubuntu/
 
 
+Contineous Integrtion Pipelines: Below is first example:
 
+1. Task - > Steps -> Job --> Stage
+
+1. 
+
+trigger:
+- main
+
+pool: 
+  vmImage: ubuntu-latest
+
+jobs:
+- job: A
+  steps:
+  - bash: echo "This is first message in the job"
+
+- job: B
+  steps:
+  - bash: echo "This is second message in the job"
+
+
+2. 
+stages:
+ - stage: A
+   jobs:
+    - job: A1     
+    - job: A2
+
+ - stage: B
+   jobs: 
+    - job: B1
+    - job: B2
+    
+Declare Variables:
+
+variables:
+ - name: myvar
+   value: "custom"
+pool: 
+  vmImage: ubuntu-latest
+
+steps:
+ - script: |
+     echo "This is one $(myvar) message"
+     
+     
+----------------
+steps:
+ - script: |
+     echo "This is one $(myvar) message"
+     echo "This is another way of printing the variable ${{ variables.platform }}"
+    
+----------------
+
+variables:
+   - name: myvariable1
+     value: globalvalue
+   - name: platform
+     value: unix    # this is available to all the jobs
+   - group: vargrp
+
+ 
+pool: 
+  vmImage: ubuntu-latest
+
+jobs:
+ - job: A
+   pool:
+     vmimage: 'ubuntu-latest'
+   variables:
+     vara: valueofvariableinsidejobA    # this is only available in job A
+   steps:
+     - bash: echo $(myvar)  
+     - bash: echo $(vara)
+
+ - job: B
+   dependsOn: A
+   pool:
+     vmimage: 'ubuntu-latest'
+   variables:
+     varc: $(vara)
+     varb: valueofvariableinsidejobB
+   steps: 
+    - bash: echo $(varc)
+    - bash: echo $(varb)
+    - bash: echo $(myvariable1)
+    - bash: echo $(myvariable2)
+    
+    -----------
 
 
 
