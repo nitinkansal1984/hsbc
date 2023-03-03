@@ -311,6 +311,109 @@ jobs:
     -----------
 
 
+pipeline:
+
+1. Accessing azure key vault variables
+2. Parameters in pipeline
+3. Conditions
+
+---------------------
+
+1. Create a service connection-- this will create a service priniciple - Add this service priniciple in the access policy for secret.
+2. Create task in the pipeline to download the secret and create another task to print the value of secret 
+OR
+2. Go to Library and create the variable group and link the azure keyvault and declare the secrets as variable there.
+
+trigger:
+- main
+
+pool: 
+  vmimage: ubuntu-latest
+
+steps:
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'Demos(f8b9b693-fc66-4e1b-a547-110404abc3c3)'
+    KeyVaultName: 'mykeyvault030323'
+    SecretsFilter: '*'
+    RunAsPreJob: false
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo $(mysecret)
+
+
+--------------------------
+Parameters:
+--------------------------
+trigger:
+- main
+
+pool: 
+  vmimage: ubuntu-latest
+
+parameters:
+  - name: entervalue
+    type: boolean
+    default: false
+
+  - name: image
+    displayName: Pool Image
+    type: string
+    default: ubuntu-latest
+    values:
+    - windows-latest
+    - ubuntu-latest
+    - macOS-latest 
+
+
+jobs:
+ - job: build
+   displayName: build
+   pool: 
+     vmimage: ${{ parameters.image }}
+   steps:
+   - task: CmdLine@2
+     inputs:
+      script: |
+       echo ${{ parameters.entervalue }}
+       echo The image parameter is ${{ parameters.image }}  
+   - task: AzureKeyVault@2
+     inputs:
+        azureSubscription: 'Demos(f8b9b693-fc66-4e1b-a547-110404abc3c3)'
+        KeyVaultName: 'mykeyvault030323'
+        SecretsFilter: '*'
+        RunAsPreJob: false
+   - task: CmdLine@2
+     inputs:
+        script: |
+          echo $(mysecret)
+
+------------------------
+Condition
+------------------------
+trigger:
+- main
+
+pool: 
+  vmimage: ubuntu-latest
+
+variables:
+  myvar: $[eq(variables['Build.sourceBranch'], 'refs/heads/main')]
+
+
+stages:
+- stage: B
+#  condition: and(succeeded(), eq(variables.myvar, 'true'))
+  jobs: 
+  - job: B1 
+    steps:
+    - script: |
+        echo $(Build.sourceBranch)
+        echo $(myvar)
+        echo Hello World!
+
 
 
 
