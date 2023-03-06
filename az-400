@@ -547,7 +547,7 @@ https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azur
 4. Authenticate to ACR using docker login
 5. Tag the image
 6. Push the image
-docker run -e AZP_URL=https://dev.azure.com/kansalster/ -e AZP_TOKEN=stjfm4bpswloftsg5f6k4mc2l7qiea -e AZP_AGENT_NAME=mydockeragent dockeragent:latest --once
+docker run -e AZP_URL=https://dev.azure.com/kansalster/ -e AZP_TOKEN=<token> -e AZP_AGENT_NAME=mydockeragent dockeragent:latest --once
 ---
 
 docker tag dockeragent:latest dockeragent0603121.azurecr.io/dockeragent:latest
