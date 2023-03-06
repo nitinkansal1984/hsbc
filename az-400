@@ -418,6 +418,141 @@ stages:
 
 
 
+-----------------
+Registring self hosted agent in ADO:
+
+https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops
+
+1. Launch a ubuntu based virtual machin on Azure.
+2. Click on org setting -> agent pool -> default pool --> add a agent
+3. Follow the steps for linux.
+4. 
+
+Export the below variable before you run ./config.sh command:
+
+export AGENT_ALLOW_RUNASROOT="1"
+
+root@vm1:~/agent# ./config.sh
+Must not run with sudo
+root@vm1:~/agent#
+root@vm1:~/agent#
+root@vm1:~/agent# export AGENT_ALLOW_RUNASROOT="1"
+root@vm1:~/agent#
+root@vm1:~/agent#
+root@vm1:~/agent# ./config.sh
+
+  ___                      ______ _            _ _
+ / _ \                     | ___ (_)          | (_)
+/ /_\ \_____   _ _ __ ___  | |_/ /_ _ __   ___| |_ _ __   ___  ___
+|  _  |_  / | | | '__/ _ \ |  __/| | '_ \ / _ \ | | '_ \ / _ \/ __|
+| | | |/ /| |_| | | |  __/ | |   | | |_) |  __/ | | | | |  __/\__ \
+\_| |_/___|\__,_|_|  \___| \_|   |_| .__/ \___|_|_|_| |_|\___||___/
+                                   | |
+        agent v2.217.2             |_|          (commit ef0b5a5)
+
+
+>> End User License Agreements:
+
+Building sources from a TFVC repository requires accepting the Team Explorer Everywhere End User License Agreement. This step is not required for building sources from Git repositories.
+
+A copy of the Team Explorer Everywhere license agreement can be found at:
+  /root/agent/license.html
+
+Enter (Y/N) Accept the Team Explorer Everywhere license agreement now? (press enter for N) > y
+
+>> Connect:
+
+Enter server URL > https://dev.azure.com/kansalster
+Enter authentication type (press enter for PAT) >
+Enter personal access token > ****************************************************
+Connecting to server ...
+
+>> Register Agent:
+
+Enter agent pool (press enter for default) >
+Enter agent name (press enter for vm1) > ubuntuvm
+Scanning for tool capabilities.
+Connecting to the server.
+Successfully added the agent
+Testing agent connection.
+Enter work folder (press enter for _work) >
+2023-03-06 04:55:40Z: Settings Saved.
+root@vm1:~/agent# 
+
+
+root@vm1:~/agent# ./svc.sh
+
+Usage:
+./svc.sh [install, start, stop, status, uninstall]
+Commands:
+   install [user]: Install agent service as Root or specified user.
+   start: Manually start the agent service.
+   stop: Manually stop the agent service.
+   status: Display status of agent service.
+   uninstall: Uninstall agent service.
+
+root@vm1:~/agent# ./svc.sh status
+
+not installed
+
+root@vm1:~/agent#
+root@vm1:~/agent#
+root@vm1:~/agent# ./svc.sh install
+Creating launch agent in /etc/systemd/system/vsts.agent.kansalster.Default.ubuntuvm.service
+Run as user:
+Run as uid: 0
+gid: 0
+Created symlink /etc/systemd/system/multi-user.target.wants/vsts.agent.kansalster.Default.ubuntuvm.service → /etc/systemd/system/vsts.agent.kansalster.Default.ubuntuvm.service.
+root@vm1:~/agent#
+root@vm1:~/agent#
+root@vm1:~/agent# systemctl ubuntuvm status
+Unknown operation ubuntuvm.
+root@vm1:~/agent# systemctl status ubuntuvm
+Unit ubuntuvm.service could not be found.
+root@vm1:~/agent# systemctl status vsts.agent.kansalster.Default.ubuntuvm.service
+● vsts.agent.kansalster.Default.ubuntuvm.service - Azure Pipelines Agent (kansalster.Default.ubuntuvm)
+     Loaded: loaded (/etc/systemd/system/vsts.agent.kansalster.Default.ubuntuvm.service; enabled; vendor preset: enabled)
+     Active: inactive (dead)
+root@vm1:~/agent#
+root@vm1:~/agent# systemctl start vsts.agent.kansalster.Default.ubuntuvm.service
+root@vm1:~/agent#
+root@vm1:~/agent# systemctl status vsts.agent.kansalster.Default.ubuntuvm.service
+● vsts.agent.kansalster.Default.ubuntuvm.service - Azure Pipelines Agent (kansalster.Default.ubuntuvm)
+     Loaded: loaded (/etc/systemd/system/vsts.agent.kansalster.Default.ubuntuvm.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2023-03-06 05:10:12 UTC; 1s ago
+   Main PID: 9136 (runsvc.sh)
+      Tasks: 20 (limit: 1076)
+     Memory: 63.5M
+     CGroup: /system.slice/vsts.agent.kansalster.Default.ubuntuvm.service
+             ├─9136 /bin/bash /root/agent/runsvc.sh
+             ├─9138 ./externals/node16/bin/node ./bin/AgentService.js
+             └─9145 /root/agent/bin/Agent.Listener run --startuptype service
+
+Mar 06 05:10:12 vm1 systemd[1]: Started Azure Pipelines Agent (kansalster.Default.ubuntuvm).
+Mar 06 05:10:12 vm1 runsvc.sh[9136]: .path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/s>
+Mar 06 05:10:12 vm1 runsvc.sh[9138]: Starting Agent listener with startup type: service
+Mar 06 05:10:12 vm1 runsvc.sh[9138]: Started listener process
+Mar 06 05:10:12 vm1 runsvc.sh[9138]: Started running service
+Mar 06 05:10:12 vm1 runsvc.sh[9138]: Scanning for tool capabilities.
+Mar 06 05:10:12 vm1 runsvc.sh[9138]: Connecting to the server.
+root@vm1:~/agent#
+
+
+
+-------------- Docker as self hosted agent-------------------
+https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops
+1. Create Dockerfile
+2. Install az cli on ubuntu vm
+3. Authenticate from vm to azure using az login command
+4. Authenticate to ACR using docker login
+5. Tag the image
+6. Push the image
+docker run -e AZP_URL=https://dev.azure.com/kansalster/ -e AZP_TOKEN=stjfm4bpswloftsg5f6k4mc2l7qiea -e AZP_AGENT_NAME=mydockeragent dockeragent:latest --once
+---
+
+docker tag dockeragent:latest dockeragent0603121.azurecr.io/dockeragent:latest
+
+
 
 
 
