@@ -553,6 +553,35 @@ docker run -e AZP_URL=https://dev.azure.com/kansalster/ -e AZP_TOKEN=<token> -e 
 docker tag dockeragent:latest dockeragent0603121.azurecr.io/dockeragent:latest
 
 
+-----------------------------
+Security in CICD pipeline and different testing processes
+
+Code Development Phase -- Static code analysis, link to work items
+Continuous Integration Phase - static code analysis, vulnerability scanning, license check
+
+Testing  -- Infrastructure scanning 
+Deployment -- Load and Performance Testing
+
+Testing: multiple type of testing:
+Unit Testing
+Code coverage
+Code metrics
+Static code analysis
+Functional testing
+Load Testing
+
+1. Install mend in org as extension
+2. Add step in build pipeline for mend
+3. Click on mend result tab to see all vulnerability issues and open source license risks
+
+
+code quality tool: SonarCloud
+1. Sign in in sonarcloud with azure credentials and create org and project
+2. Install sonarcloud extension in org
+3. Add steps in build pipeline 
+4. Login back to sonarcloud console to see code quality result.
+
+----------------
 
 
 
