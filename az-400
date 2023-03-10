@@ -576,8 +576,9 @@ Load Testing
 
 
 code quality tool: SonarCloud
-1. Sign in in sonarcloud with azure credentials and create org and project
+1. Sign in sonarcloud.io with azure credentials and create org and project
 2. Install sonarcloud extension in org
+3. Create service connection in project setting with sonarcloud token.
 3. Add steps in build pipeline 
 4. Login back to sonarcloud console to see code quality result.
 
