@@ -721,7 +721,7 @@ Now try installing the library again, it should fail because we don;t have it ex
 root@vm1:~#
 root@vm1:~# pip3 install mygoldmessage
 Looking in indexes: https://pkgs.dev.azure.com/kansalster/hsbcproject/_packaging/mygoldfeed/pypi/simple/
-User for pkgs.dev.azure.com: kansalster
+User for pkgs.dev.azure.com: <username>
 WARNING: Keyring is skipped due to an exception: No recommended backend was available. Install a recommended 3rd party backend package; or, install the keyrings.alt package if you want to use the non-recommended backends. See https://pypi.org/project/keyring for details.
 Password:
 Save credentials to keyring [y/N]: n
