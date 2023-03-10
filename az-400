@@ -592,6 +592,218 @@ https://learn.microsoft.com/en-us/azure/devops/pipelines/licensing/concurrent-jo
 
 --------------------
 
+Azure feed.
+
+Create 4 files as below:
+
+root@vm1:~/python# cat LICENSE
+root@vm1:~/python# cat README.md
+root@vm1:~/python# cat setup.py
+import setuptools
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+
+setuptools.setup(
+     name='mygoldmessage',
+     version='1.0',
+     scripts=['mygoldmessage'] ,
+     author="Nitin Kansal",
+     author_email="abc@gmail.com",
+     description="A script to print a message",
+     long_description=long_description,
+   long_description_content_type="text/markdown",
+     url="https://github.com/javatechy/dokr",
+     packages=setuptools.find_packages(),
+     classifiers=[
+         "Programming Language :: Python :: 3",
+         "License :: OSI Approved :: MIT License",
+         "Operating System :: OS Independent",
+     ],
+ )
+root@vm1:~/python# cat mygoldmessage
+#!/usr/bin/env python3
+
+print("hey there, we are learning how to build python libraries")
+root@vm1:~/python#
+
+
+Change the permission of mygoldmessage file:
+chmod +x mygoldmessage 
+
+Run below command to build the code and create library:
+python3 setup.py bdist_wheel
+
+Install the library from local:
+root@vm1:~/python#
+root@vm1:~/python# pip3 install dist/mygoldmessage-1.0-py3-none-any.whl
+Processing ./dist/mygoldmessage-1.0-py3-none-any.whl
+Installing collected packages: mygoldmessage
+Successfully installed mygoldmessage-1.0
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python# mygoldmessage
+hey there, we are learning how to build python libraries
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python# pip3 uninstall dist/mygoldmessage-1.0-py3-none-any.whl
+Found existing installation: mygoldmessage 1.0
+Uninstalling mygoldmessage-1.0:
+  Would remove:
+    /usr/local/bin/mygoldmessage
+    /usr/local/lib/python3.8/dist-packages/mygoldmessage-1.0.dist-info/*
+Proceed (y/n)? y
+  Successfully uninstalled mygoldmessage-1.0
+root@vm1:~/python#
+root@vm1:~/python#
+
+Upload the library to pypi.org: Please make sure you have signed up in pypi. Use the same credential when upload library to pypi.
+
+root@vm1:~/python# python3 -m twine upload  dist/*
+/usr/lib/python3/dist-packages/requests/__init__.py:89: RequestsDependencyWarning: urllib3 (1.26.14) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+Uploading distributions to https://upload.pypi.org/legacy/
+Enter your username: kansalster
+WARNING  Error getting password from keyring
+         Traceback (most recent call last):
+           File "/usr/local/lib/python3.8/dist-packages/twine/auth.py", line 74, in get_password_from_keyring
+             return cast(str, keyring.get_password(system, username))
+           File "/usr/lib/python3/dist-packages/keyring/core.py", line 57, in get_password
+             return _keyring_backend.get_password(service_name, username)
+           File "/usr/lib/python3/dist-packages/keyring/backends/fail.py", line 25, in get_password
+             raise NoKeyringError(msg)
+         keyring.errors.NoKeyringError: No recommended backend was available. Install a recommended 3rd party backend package; or,
+         install the keyrings.alt package if you want to use the non-recommended backends. See https://pypi.org/project/keyring for
+         details.
+Enter your password:
+Uploading mygoldmessage-1.0-py3-none-any.whl
+100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 kB • 00:00 • ?
+
+View at:
+https://pypi.org/project/mygoldmessage/1.0/
+root@vm1:~/python#
+
+Try installing it this time with pip3 install command. This library is now being installed from pypi.
+
+root@vm1:~/python#
+root@vm1:~/python# pip3 install mygoldmessage
+Collecting mygoldmessage
+  Downloading mygoldmessage-1.0-py3-none-any.whl (1.7 kB)
+Installing collected packages: mygoldmessage
+Successfully installed mygoldmessage-1.0
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python# mygoldmessage
+hey there, we are learning how to build python libraries
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python# pip3 uninstall mygoldmessage
+Found existing installation: mygoldmessage 1.0
+Uninstalling mygoldmessage-1.0:
+  Would remove:
+    /usr/local/bin/mygoldmessage
+    /usr/local/lib/python3.8/dist-packages/mygoldmessage-1.0.dist-info/*
+Proceed (y/n)? y
+  Successfully uninstalled mygoldmessage-1.0
+root@vm1:~/python# vim /etc/pip.conf
+
+update pip.conf file so that new upload is now happen on azure artifact feed. Make sure you created a feed in azure upfront and change the URL accordingly.
+
+root@vm1:~/python# cat  /etc/pip.conf
+[global]
+index-url=https://pkgs.dev.azure.com/kansalster/hsbcproject/_packaging/mygoldfeed/pypi/simple/
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python#
+Now try installing the library again, it should fail because we don;t have it existing in azure artifact feed.
+root@vm1:~#
+root@vm1:~# pip3 install mygoldmessage
+Looking in indexes: https://pkgs.dev.azure.com/kansalster/hsbcproject/_packaging/mygoldfeed/pypi/simple/
+User for pkgs.dev.azure.com: kansalster
+WARNING: Keyring is skipped due to an exception: No recommended backend was available. Install a recommended 3rd party backend package; or, install the keyrings.alt package if you want to use the non-recommended backends. See https://pypi.org/project/keyring for details.
+Password:
+Save credentials to keyring [y/N]: n
+WARNING: 401 Error, Credentials not correct for https://pkgs.dev.azure.com/kansalster/hsbcproject/_packaging/mygoldfeed/pypi/simple/mygoldmessage/
+ERROR: Could not find a version that satisfies the requirement mygoldmessage (from versions: none)
+ERROR: No matching distribution found for mygoldmessage
+root@vm1:~#
+root@vm1:~#
+Now we will publish the library to azure feed. For that updarte file .pypirc with repository-url, username and password.
+root@vm1:~#
+
+root@vm1:~/python# cat /root/.pypirc
+[distutils]
+
+index-servers=pypi azure
+
+[pypi]
+repository = https://upload.pypi.org/legacy/
+username = <username>
+
+[azure]
+repository = https://pkgs.dev.azure.com/<orgname>/<projectname>/_packaging/<feedname>/pypi/upload/
+username=<feedname>
+password=<token>
+root@vm1:~/python#
+
+
+root@vm1:~/python#
+root@vm1:~/python# python3 -m twine  upload -r azure  dist/*
+/usr/lib/python3/dist-packages/requests/__init__.py:89: RequestsDependencyWarning: urllib3 (1.26.14) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+Uploading distributions to https://pkgs.dev.azure.com/kansalster/lastproject/_packaging/myfeed/pypi/upload/
+Uploading mygoldmessage-1.0-py3-none-any.whl
+100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 kB • 00:00 • ?
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python#
+root@vm1:~/python#
+
+
+Now try installing the library which does not exist on feed. It should fail.
+root@vm1:~/python#
+root@vm1:~/python# pip3 install boto3
+Looking in indexes: https://pkgs.dev.azure.com/kansalster/hsbcproject/_packaging/mygoldfeed/pypi/simple/
+User for pkgs.dev.azure.com: <feedname>
+WARNING: Keyring is skipped due to an exception: No recommended backend was available. Install a recommended 3rd party backend package; or, install the keyrings.alt package if you want to use the non-recommended backends. See https://pypi.org/project/keyring for details.
+Password:
+Save credentials to keyring [y/N]: y
+ERROR: Could not find a version that satisfies the requirement boto3 (from versions: none)
+ERROR: No matching distribution found for boto3
+root@vm1:~/python#
+
+Enable the upstream for pip from azure artifact setting and then try installing boto3 again. It should work this time.
+
+root@vm1:~/python# pip3 install boto3
+Looking in indexes: https://pkgs.dev.azure.com/kansalster/hsbcproject/_packaging/mygoldfeed/pypi/simple/
+User for pkgs.dev.azure.com: <feedname>
+WARNING: Keyring is skipped due to an exception: No recommended backend was available. Install a recommended 3rd party backend package; or, install the keyrings.alt package if you want to use the non-recommended backends. See https://pypi.org/project/keyring for details.
+Password:
+Save credentials to keyring [y/N]: n
+Collecting boto3
+  Downloading https://pkgs.dev.azure.com/kansalster/0e5011f2-59a3-4711-a8ee-c68cec98e892/_packaging/1d0e545d-d853-4078-810e-9877638acb4f/pypi/download/boto3/1.26.88/boto3-1.26.88-py3-none-any.whl (134 kB)
+     |████████████████████████████████| 134 kB 33.3 MB/s
+Collecting jmespath<2.0.0,>=0.7.1
+  Downloading https://pkgs.dev.azure.com/kansalster/0e5011f2-59a3-4711-a8ee-c68cec98e892/_packaging/1d0e545d-d853-4078-810e-9877638acb4f/pypi/download/jmespath/1.0.1/jmespath-1.0.1-py3-none-any.whl (20 kB)
+Collecting botocore<1.30.0,>=1.29.88
+  Downloading https://pkgs.dev.azure.com/kansalster/0e5011f2-59a3-4711-a8ee-c68cec98e892/_packaging/1d0e545d-d853-4078-810e-9877638acb4f/pypi/download/botocore/1.29.88/botocore-1.29.88-py3-none-any.whl (10.5 MB)
+     |████████████████████████████████| 10.5 MB 565 kB/s
+Collecting s3transfer<0.7.0,>=0.6.0
+  Downloading https://pkgs.dev.azure.com/kansalster/0e5011f2-59a3-4711-a8ee-c68cec98e892/_packaging/1d0e545d-d853-4078-810e-9877638acb4f/pypi/download/s3transfer/0.6/s3transfer-0.6.0-py3-none-any.whl (79 kB)
+     |████████████████████████████████| 79 kB 7.1 MB/s
+Collecting python-dateutil<3.0.0,>=2.1
+  Downloading https://pkgs.dev.azure.com/kansalster/0e5011f2-59a3-4711-a8ee-c68cec98e892/_packaging/1d0e545d-d853-4078-810e-9877638acb4f/pypi/download/python-dateutil/2.8.2/python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+     |████████████████████████████████| 247 kB 35.3 MB/s
+Requirement already satisfied: urllib3<1.27,>=1.25.4 in /usr/local/lib/python3.8/dist-packages (from botocore<1.30.0,>=1.29.88->boto3) (1.26.14)
+Requirement already satisfied: six>=1.5 in /usr/lib/python3/dist-packages (from python-dateutil<3.0.0,>=2.1->botocore<1.30.0,>=1.29.88->boto3) (1.14.0)
+Installing collected packages: jmespath, python-dateutil, botocore, s3transfer, boto3
+Successfully installed boto3-1.26.88 botocore-1.29.88 jmespath-1.0.1 python-dateutil-2.8.2 s3transfer-0.6.0
+root@vm1:~/python#
+root@vm1:~/python#
+
+
 
 
 
