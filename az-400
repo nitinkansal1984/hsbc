@@ -582,8 +582,10 @@ code quality tool: SonarCloud
 4. Login back to sonarcloud console to see code quality result.
 
 ----------------
+Parallel Jobs:
+https://learn.microsoft.com/en-us/azure/devops/pipelines/licensing/concurrent-jobs?view=azure-devops&tabs=ms-hosted
 
-
+--------------------
 
 
 
