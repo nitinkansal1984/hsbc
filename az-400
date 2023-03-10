@@ -581,13 +581,15 @@ code quality tool: SonarCloud
 3. Add steps in build pipeline 
 4. Login back to sonarcloud console to see code quality result.
 
+You can use WebGoat for learning purpose. both mend and sonarcloud.
+
+https://github.com/WebGoat/WebGoat
+
 ----------------
 Parallel Jobs:
 https://learn.microsoft.com/en-us/azure/devops/pipelines/licensing/concurrent-jobs?view=azure-devops&tabs=ms-hosted
 
 --------------------
-
-
 
 
 
