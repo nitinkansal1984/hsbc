@@ -803,6 +803,45 @@ Successfully installed boto3-1.26.88 botocore-1.29.88 jmespath-1.0.1 python-date
 root@vm1:~/python#
 root@vm1:~/python#
 
+
+--------------------------
+# Pipeline to build and publish artifact 
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: |
+     pip install wheel;
+     pip install twine;
+     python3 setup.py bdist_wheel
+- task: TwineAuthenticate@1
+  inputs:
+    artifactFeed: 'hsbcproject/mygoldfeed'
+
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'pypirc'
+
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: 'pypirc'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- script: |
+     python3 -m twine upload -r azure --config-file $(Build.ArtifactStagingDirectory)/pypirc --skip-existing dist/*
+
+
+
 ------------------
 Azure pipeline triggered using github actions:
 
