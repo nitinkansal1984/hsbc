@@ -859,5 +859,144 @@ https://dev.azure.com/kansalster/hsbcproject/_build?definitionId=109
 --------------------
 
 
+Azure pipeline triggered using github actions:
+
+https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/github-actions?view=azure-devops
+
+-------------------------------------
+Azure pipeline integration with Teams notification 
+--------------------------------------
+
+https://dev.azure.com/kansalster/hsbcproject/_build?definitionId=109
+
+@Azure Pipelines subscribe https://dev.azure.com/kansalster/hsbcproject
+
+
+---------Install Jenkins--------------------
+https://www.digitalocean.com/community/tutorials/how-to-install-jenkins-on-ubuntu-20-04
+
+Open port 8080 on to VM in networking section of VM
+
+Install dotnet sdk on to vm
+https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-2004
+
+Make sure we have  github also installed on to VM
+
+Jenkins UI -- https://<publicIPofVM>:8080 
+Install all suggested plugins
+
+
+
+-------unittesting--------
+https://github.com/nitinkansal1984/unittesting.git
+
+Here is the pipeline to execute unit test codebase.
+
+
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+  
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*Test*/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+
+
+--------------------------------------
+Launch AKS cluster
+
+----------
+az group create --name myResourceGroup --location "eastus"
+az aks create -n myAKSCluster -g myResourceGroup  --node-count 1
+az aks get-credentials --resource-group MyResourceGroup --name myAKSCluster --overwrite
+
+nitin@Azure:~$ kubectl apply -f nginx.yaml 
+pod/nginx created
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl get pods
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   1/1     Running   0          7s
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl get nodes
+NAME                                STATUS   ROLES   AGE     VERSION
+aks-nodepool1-12138669-vmss000000   Ready    agent   2m58s   v1.24.9
+nitin@Azure:~$ cat az aks get-credentials --resource-group MyResourceGroup --name myAKSCluster --overwrite^C
+nitin@Azure:~$ cat nginx.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl expose pod nginx --port 80 --type LoadBalancer
+error: couldn't retrieve selectors via --selector flag or introspection: the pod has no labels and cannot be exposed
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl get pods
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   1/1     Running   0          90s
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl get pods --show-labels
+NAME    READY   STATUS    RESTARTS   AGE   LABELS
+nginx   1/1     Running   0          97s   <none>
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl label pod nginx env=dev
+pod/nginx labeled
+nitin@Azure:~$ kubectl get pods --show-labels
+NAME    READY   STATUS    RESTARTS   AGE    LABELS
+nginx   1/1     Running   0          2m4s   env=dev
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl expose pod nginx --port 80 --type LoadBalancer
+service/nginx exposed
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl get svc
+NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP      10.0.0.1      <none>        443/TCP        5m42s
+nginx        LoadBalancer   10.0.192.94   <pending>     80:31310/TCP   6s
+nitin@Azure:~$ 
+nitin@Azure:~$ 
+nitin@Azure:~$ kubectl get svc
+NAME         TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)        AGE
+kubernetes   ClusterIP      10.0.0.1      <none>          443/TCP        6m21s
+nginx        LoadBalancer   10.0.192.94   20.231.117.20   80:31310/TCP   45s
+nitin@Azure:~$ 
 
 
