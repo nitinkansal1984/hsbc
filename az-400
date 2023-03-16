@@ -999,4 +999,62 @@ kubernetes   ClusterIP      10.0.0.1      <none>          443/TCP        6m21s
 nginx        LoadBalancer   10.0.192.94   20.231.117.20   80:31310/TCP   45s
 nitin@Azure:~$ 
 
+-----------------------
+1. Launched AKS with single node
+2. Launched ACR azure container registry
+3. Cloned source code from github url on to VM
+4. Created the docker image
+5. Pushed the image to ACR
+6. Deploy application on to AKS
+
+az group create --name myResourceGroup --location "eastus"
+
+az aks create -n myAKSCluster -g myResourceGroup  --node-count 1
+
+az aks get-credentials --resource-group MyResourceGroup --name myAKSCluster --overwrite
+
+clone code from the below repo:
+https://github.com/nitinkansal1984/contoso-supermarket.git
+
+Create the docker image:
+docker build -t goldenimage .
+
+Create ACR- azure container registry:
+
+Push image to ACR:
+
+az login
+az acr login --name myregistry
+docker push azacrdemo1603.azurecr.io/mygoldenimage
+
+Run below commands to deploy application on the kubernetes:
+
+
+kubectl apply -f contosopos.yaml
+NOTE: Change the image in the file to your image:
+
+Run below command to get the IP address to access the application:
+
+# kubectl get svc 
+
+Update below environment variables within your yaml file and re deploy the application:
+kubectl apply -f contosopos.yaml
+
+Note the changes on to the UI:
+
+            - name: HEAD_TITLE
+              value : "Contoso Supermarket"
+            - name: CAMERAS_ENABLED
+              value: "True"
+            - name: CAMERAS_BASEURL
+              value: "rtsp://localhost:554/media/"
+
+
+---------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
 
