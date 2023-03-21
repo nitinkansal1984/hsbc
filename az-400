@@ -1050,9 +1050,83 @@ Note the changes on to the UI:
               value: "rtsp://localhost:554/media/"
 
 
----------------------------------------------------------------------------------------------------------------
+Below pipeline yaml file used in demo:
+trigger:
+- main
 
+
+stages:
+- stage: BuildAndPush
+  displayName: Build Image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'azazr'
+        repository: 'mygoldenimage'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          
+
+- stage: DeployDevApplication
+  displayName: DeployDevApplication
+  jobs:
+  - deployment: DeployToDev
+    environment: dev
+    displayName: DeployToDev
+    strategy:
+      runOnce:
+        deploy:
+          steps: 
+          - checkout: self
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'akscon'
+              manifests: '$(Pipeline.Workspace)/**dev/yaml/*.yaml'
+              namespace: 'contosopos'
+              containers: azacrdemo1603.azurecr.io/mygoldenimage:$(Build.BuildId)
+
+               
+
+- stage: DeployProdApplication
+  displayName: DeployProdApplication
+  jobs:
+  - deployment: DeployToProd
+    environment: prod
+    displayName: DeployToProd
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'akscon'
+              manifests: '$(Pipeline.Workspace)/**prod/yaml/*.yaml'
+              namespace: 'contosoposprod'
+              containers: azacrdemo1603.azurecr.io/mygoldenimage:$(Build.BuildId)
 ---------------------------------------------------------------------------------------------------------------
+ARM Templates in pipeline
+---------------------------------------------------------------------------------------------------------------
+Google search for 
+azure webapp sql devops tutorials github
+
+https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/app-service/app-service-web-tutorial-dotnet-sqldatabase.md
+
+az deployment group create --resource-group webapprg1 --template-file template.json
+
+
+https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-arm-template-quickstart?source=recommendations&view=azuresql
+
+
 
 
 
