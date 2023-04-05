@@ -1130,5 +1130,31 @@ https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-creat
 
 
 
+custom script extension
+
+1. login in to machine, sh script.sh
+2. using custom script ext. upload the file script.sh in to storage account. Go to vm extension, give the path to the storage account where script exist.
+
+
+Lab - PowerShell Desired State Configuration + Automation Account
+
+Ansible
+
+- service: name=nginx state=started
+
+- yum: name=tree state=latest
+
+
+30 seconds
+
+
+Test Cases:-
+
+1.  Login in to website.    ---> pass/fail
+2. Fill in the form           ---> pass/fail
+3. Submit the form         --> pass/fail --- Create a bug
+
+
+
 
 
